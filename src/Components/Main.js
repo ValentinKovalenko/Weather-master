@@ -1,8 +1,9 @@
 import React from 'react'
 import {FormattedMessage} from "react-intl";
+import {getWeather} from "../actions/customers";
 
 
-const Main = ({getWeather, handleSelect}) => {
+const Main = ({handleSelect}) => {
 
     return (
         <nav className="navbar navbar-light bg-light">

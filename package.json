@@ -20,7 +20,7 @@
     "react-i18next": "^11.8.10",
     "react-intl": "^5.13.4",
     "react-intl-translations-manager": "^5.0.3",
-    "react-redux": "^7.2.2",
+    "react-redux": "^7.2.3",
     "react-router": "^5.2.0",
     "react-scripts": "4.0.3",
     "recharts": "^2.0.8",

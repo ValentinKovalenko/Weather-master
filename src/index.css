@@ -12,7 +12,7 @@ code {
     monospace;
 }
 .card1 {
-  width: 350px;
+  width: 400px;
 }
 
 .p1 {
@@ -33,5 +33,20 @@ code {
 }
 
  .sun{
-     color: gold;
+     color: orangered;
  }
+
+ .position {
+     padding-left: 20px;
+ }
+ .position1 {
+     margin-left: 55px;
+ }
+.position2 {
+    margin-left: 70px;
+}
+.position3{
+    position: relative;
+    right: -27px;
+    top: -17px;
+}
