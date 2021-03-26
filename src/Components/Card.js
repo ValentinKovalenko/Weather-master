@@ -19,7 +19,8 @@ const Card = ({weather, weatherInfo}) => {
         )
     })
     data.splice(-24)
-    console.log(data)
+    console.log('data', data)
+
 
     const time = dayjs(new Date()).format('ddd, DD MMMM, HH:mm')
     const temp = result?.main.temp
@@ -29,6 +30,9 @@ const Card = ({weather, weatherInfo}) => {
     const city = result?.name
     const country = result?.sys.country
     const feelsLike = result?.main.feels_like
+    const icon = result?.weather[0].icon
+
+    console.log('result',result?.weather[0].icon)
 
     const [feelsTemperature, setFeelsTemperature] = useState(Math.trunc(feelsLike - 273.1))
     const [temperature, setTemperature] = useState(Math.trunc(temp - 273.1))
@@ -44,6 +48,21 @@ const Card = ({weather, weatherInfo}) => {
 
     }
 
+    const gradientOffset = () => {
+        const dataMax = Math.max(...data.map((i) => i.tempHour));
+        const dataMin = Math.min(...data.map((i) => i.tempHour));
+
+        if (dataMax <= 0) {
+            return 0;
+        }
+        if (dataMin >= 0) {
+            return 1;
+        }
+
+        return dataMax / (dataMax - dataMin);
+    };
+
+    const off = gradientOffset();
 
     return (
         <div className="card card1 fon">
@@ -56,15 +75,9 @@ const Card = ({weather, weatherInfo}) => {
                                 <p>{time}</p>
                             </div>
                             <div className='col-6'>
-                                <svg width="2.3em" height="1.5em" viewBox="0 0 16 16" className="bi bi-sun sun position2"
+                                <img src= {'http://openweathermap.org/img/w/' + icon + '.png'} className='position2' alt="..."/>
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-x position3"
                                      fill="currentColor"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M3.5 8a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0z"/>
-                                    <path fill-rule="evenodd"
-                                          d="M8.202.28a.25.25 0 0 0-.404 0l-.91 1.255a.25.25 0 0 1-.334.067L5.232.79a.25.25 0 0 0-.374.155l-.36 1.508a.25.25 0 0 1-.282.19l-1.532-.245a.25.25 0 0 0-.286.286l.244 1.532a.25.25 0 0 1-.189.282l-1.509.36a.25.25 0 0 0-.154.374l.812 1.322a.25.25 0 0 1-.067.333l-1.256.91a.25.25 0 0 0 0 .405l1.256.91a.25.25 0 0 1 .067.334L.79 10.768a.25.25 0 0 0 .154.374l1.51.36a.25.25 0 0 1 .188.282l-.244 1.532a.25.25 0 0 0 .286.286l1.532-.244a.25.25 0 0 1 .282.189l.36 1.508a.25.25 0 0 0 .374.155l1.322-.812a.25.25 0 0 1 .333.067l.91 1.256a.25.25 0 0 0 .405 0l.91-1.256a.25.25 0 0 1 .334-.067l1.322.812a.25.25 0 0 0 .374-.155l.36-1.508a.25.25 0 0 1 .282-.19l1.532.245a.25.25 0 0 0 .286-.286l-.244-1.532a.25.25 0 0 1 .189-.282l1.508-.36a.25.25 0 0 0 .155-.374l-.812-1.322a.25.25 0 0 1 .067-.333l1.256-.91a.25.25 0 0 0 0-.405l-1.256-.91a.25.25 0 0 1-.067-.334l.812-1.322a.25.25 0 0 0-.155-.374l-1.508-.36a.25.25 0 0 1-.19-.282l.245-1.532a.25.25 0 0 0-.286-.286l-1.532.244a.25.25 0 0 1-.282-.189l-.36-1.508a.25.25 0 0 0-.374-.155l-1.322.812a.25.25 0 0 1-.333-.067L8.203.28zM8 2.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z"/>
-                                </svg>
-                                <span className='text-muted p1 '>Sunny</span>
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-x position3" fill="currentColor"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd"
                                           d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
@@ -75,20 +88,27 @@ const Card = ({weather, weatherInfo}) => {
 
                         </div>
                     </div>
-
-                    <AreaChart width={350} height={150} data={data}
-                               margin={{top: 10, right: 30, left: 0, bottom: 0}}>
-                        <defs>
-                            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.6}/>
-                                <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-                            </linearGradient>
-                        </defs>
+                    <AreaChart
+                        width={350}
+                        height={150}
+                        data={data}
+                        margin={{
+                            top: 10,
+                            right: 30,
+                            left: 0,
+                            bottom: 0,
+                        }}
+                    >
                         <XAxis/>
                         <YAxis/>
                         <Tooltip/>
-                        <Area type="monotone" dataKey="tempHour" stroke="#8884d8" strokeWidth={1} fillOpacity={1}
-                              fill="url(#colorUv)"/>
+                        <defs>
+                            <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset={off} stopColor="#FFDADF" stopOpacity={1} />
+                                <stop offset={off} stopColor="#DBDBFE" stopOpacity={1} />
+                            </linearGradient>
+                        </defs>
+                        <Area type="monotone" dataKey="tempHour" stroke="#8884d8" fill="url(#splitColor)"/>
                     </AreaChart>
                     <div className='container'>
                         <div className='row align-items-end'>
@@ -136,7 +156,8 @@ const Card = ({weather, weatherInfo}) => {
 }
 const mapStateToProps = state => ({
     weather: state.weather,
-    weatherInfo: state.weatherInfo
+    weatherInfo: state.weatherInfo,
+    dataGeo: state.dataGeo
 
 })
 

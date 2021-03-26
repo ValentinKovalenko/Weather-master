@@ -1,13 +1,10 @@
 import './App.css';
 import Main from "./Components/Main";
 import Card from "./Components/Card";
-import React, {useState} from "react";
+import React from "react";
 import {IntlProvider} from 'react-intl'
 import {connect} from "react-redux";
 
-
-
-const API = 'e36f24144fe95edcc5c9d2fc4c72e7a2'
 
 const messages = {
     en: {
@@ -41,29 +38,26 @@ const messages = {
 }
 
 
-function App({city, weather, weatherInfo}) {
-    const [result, setResult] = useState()
-    const [locale, setLocale] = useState("en");
-    const handleSelect = e => {
-        setLocale(e.target.value);
-    };
+function App({ weather, weatherInfo, lang, dataGeo}) {
 
     return (
-        <IntlProvider locale={locale} messages={messages[locale]}>
+        <IntlProvider locale={lang} messages={messages[lang]}>
             <div>
-                <Main handleSelect={handleSelect}
-                />
-                {city && weather && weatherInfo ? <Card result={result}
+
+                <Main/>
+                {weather && weatherInfo ?
+                    <Card
                 /> : null}
             </div>
         </IntlProvider>
-    );
+    )
 }
 
 const mapStateToProps = state => ({
     city: state.city,
     weather: state.weather,
-    weatherInfo: state.weatherInfo
+    weatherInfo: state.weatherInfo,
+    lang: state.lang,
 })
 
 export default connect(mapStateToProps)(App);

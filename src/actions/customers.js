@@ -2,6 +2,7 @@ import {store} from '../store/index'
 
 import {actionsTypes} from '../store/reducers/mainReducer'
 
+
 const API = 'e36f24144fe95edcc5c9d2fc4c72e7a2'
 
 export const addWeather = (weather) => {
@@ -30,8 +31,35 @@ const getPeriodWeather = async (res) => {
     console.log({list})
     store.dispatch({type: actionsTypes.FETCH_WEATHER, payload: list})
 
-
-
-    console.log(list)
+    console.log('list', list)
 }
 
+export const handleSelect = e => {
+    const lang = e.target.value;
+    store.dispatch({type: actionsTypes.SET_LANG, payload: lang})
+}
+
+let lat;
+let lon;
+
+
+const successCallback = (position) => {
+    console.log(position)
+    lat = position.coords.latitude
+    lon = position.coords.longitude
+    getAddress()
+}
+const errorCallback = (error) => {
+    console.log(error)
+}
+
+ navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
+
+
+const getAddress = async () => {
+    const api = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API}`)
+    const dataGeo = await api.json()
+    console.log('dataGeo', dataGeo)
+    store.dispatch({type: actionsTypes.FETCH_WEATHER_INFO, payload: dataGeo})
+    await getPeriodWeather(dataGeo)
+}

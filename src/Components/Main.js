@@ -1,9 +1,11 @@
 import React from 'react'
 import {FormattedMessage} from "react-intl";
 import {getWeather} from "../actions/customers";
+import {connect} from "react-redux";
 
+import {handleSelect} from '../actions/customers'
 
-const Main = ({handleSelect}) => {
+const Main = () => {
 
     return (
         <nav className="navbar navbar-light bg-light">
@@ -15,11 +17,14 @@ const Main = ({handleSelect}) => {
                            placeholder="City name..."
                            autoComplete="on"
                     />
-                    <button className="btn btn-outline-success" type="submit"><FormattedMessage id='add'
-                                                                                                defaultMessage='Add'/>
+                    <button
+                        className="btn btn-outline-success"
+                        type="submit"><FormattedMessage
+                        id='add'
+                        defaultMessage='Add'/>
                     </button>
                 </form>
-                <select onClick={handleSelect}>
+                <select onClick={(e)=>handleSelect(e)}>
                     <option value="en">EN</option>
                     <option value="ua">UA</option>
                     <option value="ru">RU</option>
@@ -28,4 +33,12 @@ const Main = ({handleSelect}) => {
         </nav>
     )
 }
-export default Main
+
+
+const mapStateToProps = state => ({
+    lang: state.lang,
+
+
+})
+
+export default connect(mapStateToProps)(Main);

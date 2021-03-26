@@ -2,13 +2,15 @@
 export const actionsTypes = {
     FETCH_WEATHER: 'FETCH_WEATHER',
     SET_CITY:'SET_CITY',
-    FETCH_WEATHER_INFO: 'FETCH_WEATHER_INFO'
+    FETCH_WEATHER_INFO: 'FETCH_WEATHER_INFO',
+    SET_LANG: 'SET_LANG',
 }
 
 const initialState = {
     weather: null,
     weatherInfo: null,
-    city:null
+    city:null,
+    lang: 'en',
 }
 
 export const mainReducer = (state = initialState, action) => {
@@ -27,6 +29,11 @@ export const mainReducer = (state = initialState, action) => {
             return {
                 ...state,
                 weather: action.payload
+            }
+        case actionsTypes.SET_LANG:
+            return {
+                ...state,
+                lang: action.payload
             }
         default:
             return state
